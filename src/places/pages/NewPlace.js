@@ -5,6 +5,7 @@ import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import ImageUpload from "../../shared/components/form-elements/ImageUpload";   // Import ImageUpload component
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
@@ -31,6 +32,10 @@ const NewPlace = () => {
         value: "",
         isValid: false,
       },
+      image: {   // Image input state; new 
+        value: null,
+        isValid: false,
+      }
     },
     false
   );
@@ -39,20 +44,19 @@ const NewPlace = () => {
 
   const placeSubmitHandler = async (event) => {
     event.preventDefault();
-    try {
-      await sendRequest(
-        "http://localhost:5005/api/places",
-        "POST",
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value,
-          address: formState.inputs.address.value,
-          creator: auth.userId,
-        }),
-        { "Content-Type": "application/json" }
-      );
-      navigate("/");
-    } catch (err) {}
+
+    const formData = new FormData();  // Use FormData to handle file upload
+    formData.append("title", formState.inputs.title.value);
+    formData.append("description", formState.inputs.description.value);
+    formData.append("address", formState.inputs.address.value);
+    formData.append("creator", auth.userId);   // Temporary, until auth middleware exists
+    formData.append("image", formState.inputs.placeImage.value);
+
+    await sendRequest(  // Use sendRequest to places endpoint
+      "http://localhost:5005/api/places",
+      "POST",
+      formData
+    );
   };
 
   return (
@@ -84,6 +88,12 @@ const NewPlace = () => {
           validators={[VALIDATOR_REQUIRE()]}
           errorText="Please enter a valid address."
           onInput={inputHandler}
+        />
+        <ImageUpload   // Image upload component added here
+          id="image"
+          onInput={inputHandler}
+          center
+          errorText="You must choose a valid JPG or PNG image."
         />
         <Button type="submit" disabled={!formState.isValid}>
           ADD PLACE

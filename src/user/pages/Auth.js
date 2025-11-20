@@ -51,11 +51,16 @@ const Auth = () => {
             value: "",
             isValid: false,
           },
+          profileImage: {   // Added profileImage field for signup mode
+            value: null,
+            isValid: false,
+          },
         },
         false
       );
     }
     setIsLoginMode((prevMode) => !prevMode);
+    console.log(formState.inputs);   // For debugging purposes
   };
 
   const authSubmitHandler = async (event) => {
@@ -78,18 +83,18 @@ const Auth = () => {
       } catch (err) {}
     } else {
       try {
-        const responseData = await sendRequest(
+        const formData = new FormData();   // Use FormData to handle file upload
+        formData.append("name", formState.inputs.name.value);
+        formData.append("email", formState.inputs.email.value);
+        formData.append("password", formState.inputs.password.value);
+        formData.append("image", formState.inputs.profileImage.value);
+
+        await sendRequest(  //  Use sendRequest to signup endpoint
           "http://localhost:5005/api/users/signup",
           "POST",
-          JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-          }),
-          {
-            "Content-Type": "application/json",
-          }
+          formData
         );
+
         auth.login(responseData.user.id);
       } catch (err) {}
     }
@@ -132,6 +137,13 @@ const Auth = () => {
             errorText="Please enter a valid password, at least 5 characters."
             onInput={inputHandler}
           />
+          {!isLoginMode && (   // Image upload can be added here in signup mode
+            <ImageUpload
+              id="profileImage"
+              center
+              onInput={inputHandler}
+            />
+          )}
           <Button type="submit" disabled={!formState.isValid}>
             {isLoginMode ? "LOGIN" : "SIGNUP"}
           </Button>
