@@ -41,7 +41,9 @@ const PlaceItem = (props) => {
       }
     );
     props.onDelete(props.id);
-  } catch (err) {}
+  } catch (err) {
+    console.error('Delete failed:', err);
+  }
 };
   return (
     <React.Fragment>
