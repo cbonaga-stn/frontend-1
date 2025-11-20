@@ -1,6 +1,6 @@
 // src/shared/components/FormElements/ImageUpload.js
-import React, { useRef, useState } from "react";
-import Button from "../../UI/Button";
+import React, { useRef, useState, useEffect } from "react";
+import Button from "../..//components/FormElements/Button";
 import "./ImageUpload.css";
 
 const ImageUpload = (props) => {

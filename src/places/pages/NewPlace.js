@@ -5,7 +5,7 @@ import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-import ImageUpload from "../../shared/components/form-elements/ImageUpload";   // Import ImageUpload component
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";   // Import ImageUpload component
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
