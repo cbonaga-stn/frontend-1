@@ -29,15 +29,20 @@ const PlaceItem = (props) => {
   };
 
   const confirmDeleteHandler = async () => {
-    setShowConfirmModal(false);
-    try {
-      await sendRequest(
-        `http://localhost:5005/api/places/${props.id}`,
-        "DELETE"
-      );
-      props.onDelete(props.id);
-    } catch (err) {}
-  };
+  setShowConfirmModal(false);
+  try {
+    await sendRequest(
+      `http://localhost:5005/api/places/${props.id}`,
+      'DELETE',
+      {
+        headers: {
+          Authorization: 'Bearer ' + auth.token
+        }
+      }
+    );
+    props.onDelete(props.id);
+  } catch (err) {}
+};
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />

@@ -39,19 +39,22 @@ const NewPlace = () => {
     },
     false
   );
+  console.log('Form state:', formState);
 
   const navigate = useNavigate();
 
   const placeSubmitHandler = async (event) => {
     event.preventDefault();
 
+    console.log('Form event:', event);
+
     const formData = new FormData();  // Use FormData to handle file upload
     formData.append("title", formState.inputs.title.value);
     formData.append("description", formState.inputs.description.value);
     formData.append("address", formState.inputs.address.value);
     formData.append("creator", auth.userId);   // Temporary, until auth middleware exists
-    formData.append("image", formState.inputs.placeImage.value);
-
+    formData.append("image", formState.inputs.image.value);
+    
     await sendRequest(  // Use sendRequest to places endpoint
       "http://localhost:5005/api/places",
       "POST",
